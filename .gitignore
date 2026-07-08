@@ -1,2 +1,8 @@
 top5_photos/
 .DS_Store
+v3_output.csv
+v24_output.csv
+*_run.log
+all_photos.txt
+review_v22/
+__pycache__/

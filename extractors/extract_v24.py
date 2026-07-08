@@ -102,3 +102,13 @@ if __name__=="__main__":
         print(r["file"],"| bg:",r["background_colors"],"| skin:",r["skin_color"],"| floor:",r["floor_colors"],
               "| wb:",f"{r['waistband']}({r['wb_confidence']}%)","| shorts:"," + ".join(f"{c}({s})" for c,s,_ in r["shorts"]),
               "| hem_y:",r["hem_y_pct"])
+    with open("v24_output.csv","w",newline="") as f:
+        wr = csv.DictWriter(f, fieldnames=["photo_file","background_colors","skin_color","floor_colors",
+                                           "waistband","wb_confidence","shorts_colors","sh_confidence","hem_y_pct"])
+        wr.writeheader()
+        for r in out:
+            wr.writerow({"photo_file":r["file"],"background_colors":r["background_colors"],
+                "skin_color":r["skin_color"],"floor_colors":r["floor_colors"],
+                "waistband":r["waistband"],"wb_confidence":r["wb_confidence"],
+                "shorts_colors":" + ".join(f"{c}({s})" for c,s,_ in r["shorts"]) or "UNREADABLE",
+                "sh_confidence":r["sh_confidence"],"hem_y_pct":r["hem_y_pct"]})

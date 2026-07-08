@@ -3,8 +3,10 @@
 Person silhouette via rembg; garment located by position within the silhouette
 (waist = first non-skin band below torso, hem = skin resumes), so prints whose
 hue matches skin (the Keyon Harry case) are separated spatially, not by color.
-Probe-validated 2026-07-08 (Edwards green-gradient exact match); NOT yet
-benchmarked on the full label set. Requires: pip install rembg onnxruntime scikit-learn"""
+Benchmarked 2026-07-08 vs all 73 labels: 67% waistband, 42% strict / 82% loose shorts
+(gate 90/80 not cleared; see README for what was tried). Waist anchor requires the
+non-skin band to persist ~2-7% of body height below the hit (arms crossing the torso
+in transition poses otherwise fake the waist). Requires: pip install "rembg[cpu]" scikit-learn"""
 import numpy as np, colorsys, os, sys
 from PIL import Image
 from sklearn.cluster import KMeans
@@ -17,6 +19,14 @@ REF = {"black":(12,12,14),"charcoal":(48,46,50),"white":(238,236,230),"gray":(13
 "tan/bone":(210,190,160),"brown":(108,74,46)}
 def nearest(rgb): return min(REF, key=lambda k: sum((int(a)-int(b))**2 for a,b in zip(REF[k],rgb)))
 
+def rgb2hsv_arr(px):
+    p = np.asarray(px, dtype=np.float32)/255.0
+    mx = p.max(1); mn = p.min(1); d = mx-mn
+    dd = np.where(d==0, 1, d)
+    r,g,b = p[:,0], p[:,1], p[:,2]
+    h = np.where(mx==r, ((g-b)/dd)%6, np.where(mx==g, (b-r)/dd+2, (r-g)/dd+4))/6.0
+    return np.where(d==0, 0, h), np.where(mx>0, d/np.where(mx==0,1,mx), 0), mx
+
 def analyze(path, session):
     im = Image.open(path).convert("RGB"); A = np.array(im); h,w = A.shape[:2]
     M = np.array(remove(im, session=session, only_mask=True)) > 128
@@ -27,22 +37,42 @@ def analyze(path, session):
     skin = np.median(A[ys[band], xs[band]], axis=0)
     sk_h, sk_s, sk_v = colorsys.rgb_to_hsv(*(skin/255))
     def skinlike(px):
-        hsv = np.array([colorsys.rgb_to_hsv(*(p/255.0)) for p in px])
-        dh = np.minimum(np.abs(hsv[:,0]-sk_h), 1-np.abs(hsv[:,0]-sk_h))
-        return (dh<0.06) & (np.abs(hsv[:,2]-sk_v)<0.30)
-    waist = hem = None
+        if not len(px): return np.zeros(0, bool)
+        hh, ss, vv = rgb2hsv_arr(px)
+        dh = np.minimum(np.abs(hh-sk_h), 1-np.abs(hh-sk_h))
+        # NB: no v2.3-style shadow term here — it eats black waistbands (dark px have unstable hue)
+        return (dh<0.06) & (np.abs(vv-sk_v)<0.30)
+    def row_skinfrac(yy):
+        sel = ys==yy
+        if sel.sum() < 8: return None
+        return skinlike(A[ys[sel], xs[sel]]).mean()
+    waist = hem = first_cand = None
     step = max(2,(bot-top)//140)
     for yy in range(top+int((bot-top)*0.30), bot, step):
-        sel = ys==yy
-        if sel.sum() < 8: continue
-        frac = skinlike(A[ys[sel], xs[sel]]).mean()
-        if waist is None and frac < 0.45: waist = yy
+        frac = row_skinfrac(yy)
+        if frac is None: continue
+        if waist is None and frac < 0.45:
+            if first_cand is None: first_cand = yy
+            # persistence: a real waistband has garment continuing below it; an arm or
+            # hand crossing the torso (common transition poses) gives skin back within
+            # a few % of body height and must not anchor the waist
+            probe = [row_skinfrac(py) for py in range(yy+int((bot-top)*0.02), yy+int((bot-top)*0.07), step)]
+            probe = [p for p in probe if p is not None]
+            if probe and np.median(probe) < 0.50: waist = yy
         elif waist and frac > 0.65 and yy > waist + (bot-top)*0.08: hem = yy; break
+    if waist is None: waist = first_cand   # nothing persistent found: fall back to first candidate
     if waist is None: return None
-    gsel = (ys >= waist) & (ys <= (hem or waist + int((bot-top)*0.30)))
-    gpx = A[ys[gsel], xs[gsel]]; gpx = gpx[~np.all(gpx>200, axis=1)]
-    wb_sel = (ys >= waist) & (ys <= waist + int((bot-top)*0.035))
-    wpx = A[ys[wb_sel], xs[wb_sel]]; wpx = wpx[~np.all(wpx>200,axis=1)]
+    hem_eff = hem or waist + int((bot-top)*0.30)
+    gsel = (ys >= waist) & (ys <= hem_eff)
+    gys, gxs = ys[gsel], xs[gsel]
+    gall = A[gys, gxs]
+    # number disc: suppress bright pixels only in the central waist zone, not globally
+    # (global white-drop was erasing white shorts)
+    cx = np.median(gxs); span = max(int(gxs.max())-int(gxs.min()), 1)
+    disc_white = (np.abs(gxs-cx) < 0.20*span) & (gys <= waist + 0.6*(hem_eff-waist)) & np.all(gall>195, axis=1)
+    keepm = ~disc_white & ~skinlike(gall)   # skin exclusion: waist row can be up to 45% skin
+    gpx = gall[keepm]
+    wpx = gall[keepm & (gys <= waist + int((bot-top)*0.035))]
     res = {"photo_file":os.path.basename(path), "skin":nearest(skin),
            "waistband": nearest(np.median(wpx,axis=0)) if len(wpx)>30 else "UNREADABLE",
            "hem_pct_of_body": round((hem-top)/(bot-top),3) if hem else "", "shorts_colors":""}
