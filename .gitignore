@@ -1,4 +1,6 @@
 top5_photos/
+.env
+.env.*
 .DS_Store
 v3_output.csv
 v24_output.csv
@@ -6,3 +8,4 @@ v24_output.csv
 all_photos.txt
 review_v22/
 __pycache__/
+v4_output.csv
