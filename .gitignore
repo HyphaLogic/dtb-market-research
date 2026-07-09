@@ -9,3 +9,4 @@ all_photos.txt
 review_v22/
 __pycache__/
 v4_output.csv
+v4_labeled_backup.csv
