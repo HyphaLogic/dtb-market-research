@@ -1,83 +1,83 @@
 dimension,value,count,pct_of_athletes
 shorts_color_presence,black,191,66
-shorts_color_presence,white,135,47
+shorts_color_presence,white,140,49
 shorts_color_presence,red,73,25
 shorts_color_presence,light blue,45,16
 shorts_color_presence,royal blue,43,15
-shorts_color_presence,yellow,32,11
+shorts_color_presence,yellow,33,11
 shorts_color_presence,gold,32,11
-shorts_color_presence,coral,28,10
+shorts_color_presence,charcoal,30,10
 shorts_color_presence,orange,28,10
-shorts_color_presence,charcoal,26,9
-shorts_color_presence,green,23,8
-shorts_color_presence,navy,19,7
-shorts_color_presence,purple,19,7
-shorts_color_presence,teal,18,6
-shorts_color_presence,gray,13,5
-shorts_color_presence,pink,12,4
-shorts_color_presence,lime,10,3
+shorts_color_presence,coral,26,9
+shorts_color_presence,green,24,8
+shorts_color_presence,navy,21,7
+shorts_color_presence,purple,17,6
+shorts_color_presence,teal,16,6
+shorts_color_presence,gray,14,5
+shorts_color_presence,pink,10,3
+shorts_color_presence,lime,9,3
+shorts_color_presence,magenta,7,2
+shorts_color_presence,tan/bone,6,2
 shorts_color_presence,maroon,6,2
-shorts_color_presence,magenta,5,2
-shorts_color_presence,tan/bone,4,1
-shorts_color_presence,lavender,3,1
-waistband,black,171,59
-waistband,royal blue,25,9
-waistband,red,17,6
-waistband,white,14,5
+shorts_color_presence,lavender,4,1
+waistband,black,198,69
+waistband,royal blue,17,6
+waistband,red,12,4
+waistband,white,11,4
 waistband,green,10,3
 waistband,navy,9,3
-waistband,charcoal,9,3
-waistband,coral,8,3
-waistband,light blue,7,2
+waistband,light blue,8,3
+waistband,charcoal,4,1
 waistband,purple,4,1
-waistband,teal,3,1
-waistband,yellow,2,1
-waistband,pink,2,1
+waistband,coral,4,1
+waistband,teal,2,1
+waistband,gold,2,1
 waistband,gray,2,1
+waistband,yellow,1,0
 waistband,lavender,1,0
-waistband,gold,1,0
-waistband,maroon,1,0
-waistband,tan/bone,1,0
 waistband,orange,1,0
-base,solid,132,46
-base,gradient,78,27
-base,pattern,39,14
-base,energy-element,37,13
-base,graffiti,2,1
-frame,frame,152,53
-frame,no frame,136,47
-accent,graphic/silhouette,96,33
-accent,trim/piping,71,25
-accent,block panels,57,20
-accent,none,37,13
-accent,bands,27,9
-color_pair,black+white,67,23
-color_pair,black+red,53,18
-color_pair,red+white,30,10
-color_pair,light blue+white,28,10
-color_pair,black+yellow,27,9
+waistband,pink,1,0
+waistband,tan/bone,1,0
+base,solid,131,45
+base,gradient,81,28
+base,pattern,42,15
+base,energy-element,33,11
+base,graffiti,1,0
+frame,frame,203,70
+frame,no frame,84,29
+frame,reverse frame,1,0
+accent,graphic/silhouette,92,32
+accent,trim/piping,79,27
+accent,block panels,56,19
+accent,none,32,11
+accent,bands,29,10
+color_pair,black+white,70,24
+color_pair,black+red,54,19
+color_pair,red+white,32,11
+color_pair,light blue+white,30,10
+color_pair,black+yellow,28,10
 color_pair,royal blue+white,26,9
+color_pair,black+orange,25,9
 color_pair,light blue+royal blue,23,8
-color_pair,black+orange,23,8
-color_pair,black+coral,20,7
-color_pair,black+gold,19,7
-color_pair,black+charcoal,18,6
+color_pair,black+charcoal,19,7
+color_pair,black+gold,18,6
 color_pair,black+royal blue,17,6
-color_pair,coral+white,16,6
-color_pair,orange+red,16,6
-color_pair,black+teal,15,5
+color_pair,black+coral,17,6
+color_pair,orange+red,15,5
+color_pair,coral+white,14,5
+color_pair,black+teal,14,5
+color_pair,black+green,13,5
+color_pair,black+purple,13,5
 color_pair,white+yellow,12,4
-color_pair,black+purple,12,4
-color_pair,black+light blue,11,4
-color_pair,black+green,11,4
-color_pair,navy+white,11,4
-color_pair,charcoal+white,11,4
-color_pair,black+lime,10,3
-color_pair,light blue+navy,10,3
-color_pair,black+pink,9,3
-color_pair,black+gray,8,3
-color_pair,gray+white,8,3
-color_pair,green+white,8,3
-color_pair,gold+red,7,2
-color_pair,gold+orange,7,2
-color_pair,purple+white,7,2
+color_pair,navy+white,12,4
+color_pair,light blue+navy,12,4
+color_pair,charcoal+white,12,4
+color_pair,black+gray,9,3
+color_pair,black+light blue,9,3
+color_pair,green+white,9,3
+color_pair,black+lime,8,3
+color_pair,orange+white,8,3
+color_pair,red+yellow,7,2
+color_pair,gray+white,7,2
+color_pair,black+pink,7,2
+color_pair,navy+royal blue,6,2
